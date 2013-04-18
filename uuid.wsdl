@@ -1,0 +1,58 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<wsdl:definitions
+        xmlns:tns="http://xml.company.com/ns/example/"
+        xmlns:xs="http://www.w3.org/2001/XMLSchema"
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+        xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+        targetNamespace="http://xml.company.com/ns/example/" name="Application">
+    <wsdl:types>
+        <xs:schema targetNamespace="http://xml.company.com/ns/example/" elementFormDefault="qualified">
+            <xs:complexType name="say_my_uuid">
+                <xs:sequence>
+                    <xs:element name="uuid" type="tns:uuid" minOccurs="0" nillable="true"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:simpleType name="uuid">
+                <xs:restriction base="xs:string">
+                    <xs:pattern value="[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:complexType name="say_my_uuidResponse">
+                <xs:sequence>
+                    <xs:element name="say_my_uuidResult" type="xs:string" minOccurs="0" nillable="true"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="say_my_uuidResponse" type="tns:say_my_uuidResponse"/>
+            <xs:element name="say_my_uuid" type="tns:say_my_uuid"/>
+        </xs:schema>
+    </wsdl:types>
+    <wsdl:message name="say_my_uuid">
+        <wsdl:part name="say_my_uuid" element="tns:say_my_uuid"/>
+    </wsdl:message>
+    <wsdl:message name="say_my_uuidResponse">
+        <wsdl:part name="say_my_uuidResponse" element="tns:say_my_uuidResponse"/>
+    </wsdl:message>
+    <wsdl:service name="ExampleService">
+        <wsdl:port name="Application" binding="tns:Application">
+            <soap:address location="http://localhost/uuid/"/>
+        </wsdl:port>
+    </wsdl:service>
+    <wsdl:portType name="Application">
+        <wsdl:operation name="say_my_uuid" parameterOrder="say_my_uuid">
+            <wsdl:input name="say_my_uuid" message="tns:say_my_uuid"/>
+            <wsdl:output name="say_my_uuidResponse" message="tns:say_my_uuidResponse"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="Application" type="tns:Application">
+        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="say_my_uuid">
+            <soap:operation soapAction="say_my_uuid" style="document"/>
+            <wsdl:input name="say_my_uuid">
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output name="say_my_uuidResponse">
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+</wsdl:definitions>
